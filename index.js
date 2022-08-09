@@ -82,7 +82,7 @@ const inBounds = (body, canvas) =>
     }
 
 ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+ledges.forEach(e => draw(e, ctx));
 for (let i = particle.length - 1; i >= 0; i--) {
     draw(particle[i], ctx);
 
@@ -91,8 +91,6 @@ for (let i = particle.length - 1; i >= 0; i--) {
         particle.splice(i, 1);
     }
 }
-
-ledges.forEach(e => draw(e, ctx));
     Matter.Engine.update(engine); // instead of a single call to Engine.run(engine)
     requestAnimationFrame(update);
 })();
