@@ -3,43 +3,49 @@
 //#endregion
 
 const rad = d => d * Math.PI / 180;
-const canvas = document.createElement("canvas");
-document.body.appendChild(canvas);
-canvas.width = 400;
-canvas.height = 800;
+const canvas = document.getElementById('canvas')
+canvas.width = 360;
+canvas.height = 600;
 canvas.style.border = "1px solid #000";
 const ctx = canvas.getContext("2d");
 let speed = 1
-let color = '#D2B48C'
-const colorBox = document.getElementById('color')
-const numberBox = document.getElementById('number')
+let color = 50
+let maxParticles = 1200
+let chuteAngle = 21
 
-handleColor = () => {
-    color = colorBox.value
+randomColor = () => {
+    maybeColor = Math.floor(Math.random()* 361)
+    if(Math.abs(color - maybeColor) > 40){
+        color = maybeColor
+    }else{
+        randomColor()
+    }
 }
-handleNumber = () => {
-    speed = numberBox.value
+increaseSpeed = () => {
+    speed++
 }
-
+decreaseSpeed = () => {
+    if (speed > 0) {
+        speed--
+    }
+}
 
 const engine = Matter.Engine.create();
 engine.positionIterations = 25;
 engine.velocityIterations = 25;
 
-
-
 // Create body arrays
-const boxes = [];
+const particle = [];
 const ledges = [
-    Matter.Bodies.rectangle(-30                   , 700, 440, 10,{isStatic: true}),
-    Matter.Bodies.rectangle(canvas.width / 2 + 230, 700, 440, 10,{isStatic: true}),
-    Matter.Bodies.rectangle(0,0,10,1415,{isStatic:true}),
-    Matter.Bodies.rectangle(400,0,10,1415,{isStatic:true})
+    Matter.Bodies.rectangle(-30                   , 520, 408, 8,{isStatic: true}),
+    Matter.Bodies.rectangle(canvas.width / 2 + 230, 520, 408, 8,{isStatic: true}),
+    Matter.Bodies.rectangle(0,0,10,1055,{isStatic:true}),
+    Matter.Bodies.rectangle(360,0,10,1070,{isStatic:true})
 ];
-Matter.Body.rotate(ledges[0], rad(20));
-Matter.Body.rotate(ledges[1], rad(-20));
+Matter.Body.rotate(ledges[0], rad(chuteAngle));
+Matter.Body.rotate(ledges[1], rad(chuteAngle - (chuteAngle * 2)));
 ledges.forEach((ledge)=>{
-    ledge.color = '#000000'
+    ledge.color = '#71797E'
 })
 // Add bodies to the world
 Matter.Composite.add(engine.world, ledges);
@@ -60,23 +66,23 @@ const inBounds = (body, canvas) =>
 );
 (function update() {
     for(let i = 1; i <= speed; i++){
-        if (boxes.length < 1250) {
-            const box = Matter.Bodies.polygon(200, -5, 3, 11,{frictionAir: 0, friction: 0.4, restitution: 0}
+        if (particle.length < maxParticles) {
+            const shape = Matter.Bodies.polygon(200, -5, 3, 10,{frictionAir: 0, friction: 1, restitution: 0}
             );
-            boxes.push(box);
-            box.color = color;
-            Matter.Composite.add(engine.world, box);
+            particle.push(shape);
+            shape.color = `hsl(${color}, 70%, 45%)`;
+            Matter.Composite.add(engine.world, shape);
             }
     }
 
 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-for (let i = boxes.length - 1; i >= 0; i--) {
-    draw(boxes[i], ctx);
+for (let i = particle.length - 1; i >= 0; i--) {
+    draw(particle[i], ctx);
 
-    if (!inBounds(boxes[i], canvas)) {
-        Matter.Composite.remove(engine.world, boxes[i]);
-        boxes.splice(i, 1);
+    if (!inBounds(particle[i], canvas)) {
+        Matter.Composite.remove(engine.world, particle[i]);
+        particle.splice(i, 1);
     }
 }
 

@@ -9,15 +9,12 @@
         <link rel="stylesheet" href="index.css">
     </head>
     <body>
-        <div>
-            <label>Color</label>
-            <input type="color" id='color'>
-            <div onclick='handleColor()' class='button'>change</div>
-            <br>
-            <label>Load Speed</label>
-            <input type="number" id='number' min="0" max='20'>
-            <div onclick='handleNumber()' class='button'>change</div>
+        <div class='controls'>
+            <div onclick='randomColor()' class='button'>Change Color</div>
+            <div onclick='increaseSpeed()' class='button'> + </div>
+            <div onclick='decreaseSpeed()' class='button'> - </div>
         </div>
+        <canvas id='canvas'></canvas>
         <script src="index.js" async defer></script>
     </body>
 </html>

@@ -2,8 +2,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     height: 97vh;
     margin: 0;
+    background-color: #202124;
 }
 .button{
     display: inline-block;
@@ -28,6 +30,14 @@ body {
     text-decoration: none;
 
     color: #333;
-    background-color: #fff;
+    background-color:#bdc1c6;
     border-color: #ccc;
+}
+.controls {
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+}
+canvas{
+    background-color:#bdc1c6;
 }
