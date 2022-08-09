@@ -11,7 +11,9 @@ const ctx = canvas.getContext("2d");
 let speed = 1
 let color = 50
 let maxParticles = 1200
-let chuteAngle = 21
+let chuteAngle = 20
+let speedDisplay = document.getElementById('speedDisplay')
+speedDisplay.textContent = speed.toString();
 
 randomColor = () => {
     maybeColor = Math.floor(Math.random()* 361)
@@ -22,11 +24,15 @@ randomColor = () => {
     }
 }
 increaseSpeed = () => {
-    speed++
+    if (speed < 5){
+        speed++
+        speedDisplay.textContent = speed.toString();
+    }
 }
 decreaseSpeed = () => {
     if (speed > 0) {
         speed--
+        speedDisplay.textContent = speed.toString();
     }
 }
 
@@ -67,7 +73,7 @@ const inBounds = (body, canvas) =>
 (function update() {
     for(let i = 1; i <= speed; i++){
         if (particle.length < maxParticles) {
-            const shape = Matter.Bodies.polygon(200, -5, 3, 10,{frictionAir: 0, friction: 1, restitution: 0}
+            const shape = Matter.Bodies.polygon(200, -5, 3, 9,{frictionAir: 0.03, friction: 0.05, restitution: 0}
             );
             particle.push(shape);
             shape.color = `hsl(${color}, 70%, 45%)`;
